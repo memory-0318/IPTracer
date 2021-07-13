@@ -19,11 +19,11 @@ import java.net.URISyntaxException;
  */
 @Controller
 @RequiredArgsConstructor
-public class ReurlController {
+public class RedirectController {
     private final UrlPathDecEncService urlPathDecEncService;
 
-    @GetMapping(value = { "reurl/{encodedUrlPath}" })
-    public String redirect(@PathVariable("encodedUrlPath") String encodedUrlPath) {
+    @GetMapping(value = { "/{encodedUrlPath}" })
+    public String redirectMiddlePage(@PathVariable("encodedUrlPath") String encodedUrlPath) {
         return "index";
     }
 
