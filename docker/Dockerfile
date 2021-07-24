@@ -8,4 +8,5 @@ FROM openjdk:8-jre-alpine
 RUN mkdir /app
 COPY --from=build /projects/target/*.jar /app/application.jar
 WORKDIR /app
+EXPOSE 8080
 CMD "java" "-jar" "application.jar"
