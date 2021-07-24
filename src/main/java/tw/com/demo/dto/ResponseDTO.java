@@ -25,8 +25,8 @@ public class ResponseDTO <T> {
         return ResponseDTO.ok(null);
     }
 
-    public static ResponseDTO<Object> ok(Object data) {
-        return ResponseDTO.builder()
+    public static <T> ResponseDTO<T> ok(T data) {
+        return ResponseDTO.<T>builder()
             .setSuccess(true)
             .setDateTime(OffsetDateTime.now())
             .setData(data)
@@ -35,7 +35,7 @@ public class ResponseDTO <T> {
     }
 
     public static ResponseDTO<Object> fail() {
-        return ResponseDTO.fail("Unknown error");
+        return ResponseDTO.fail("Unexpected error");
     }
 
     public static ResponseDTO<Object> fail(String errorMsg) {
