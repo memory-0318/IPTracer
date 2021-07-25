@@ -26,9 +26,9 @@ public class UrlShortenController {
     private final UrlShortenService urlShortenService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDTO<String> shortenUrl(@Valid @RequestBody UrlShortenCaseApplyDTO applyDTO) {
+    public ResponseDTO<String> applyUrlShorteningCase(@Valid @RequestBody UrlShortenCaseApplyDTO applyDTO) {
         UrlShorteningCase urlShorteningCase = this.urlShortenService
-            .shortenUrl(UrlShortenCaseApplyMapper.INSTANCE.toVO(applyDTO));
+            .applyUrlShorteningCase(UrlShortenCaseApplyMapper.INSTANCE.toVO(applyDTO));
         return ResponseDTO.ok(urlShorteningCase.getShortenedUrl());
     }
 }

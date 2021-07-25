@@ -16,7 +16,7 @@ import tw.com.demo.model.vo.UrlShortenCaseApplyVO;
 public class UrlShortenService {
     private final UrlShortener urlShortener;
 
-    public UrlShorteningCase shortenUrl(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
+    public UrlShorteningCase applyUrlShorteningCase(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
         return this.urlShortener.applyUrlShortenCase(urlShortenCaseApplyVO);
     }
 }
