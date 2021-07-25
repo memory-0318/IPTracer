@@ -14,8 +14,6 @@ import java.util.List;
  * @date: 2021/7/13
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Setter(value = AccessLevel.NONE)
 @Builder(setterPrefix = "set", toBuilder = true)
 public class UrlShortenCaseApplyDTO {
@@ -29,7 +27,7 @@ public class UrlShortenCaseApplyDTO {
     private String urlToShorten;
 
     @NotEmpty(message = "縮網址後綴如果設定就不可以是空白")
-    private String urlShortenKey;
+    private String shortenedUrlKey;
 
     private String remark;
 
