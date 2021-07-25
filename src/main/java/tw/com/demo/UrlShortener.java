@@ -20,7 +20,7 @@ public class UrlShortener {
     private CaseIdGenerator caseIdGenerator;
     private UrlEncoder urlEncoder;
 
-    private Map<String, UrlShorteningCase> shortenedKeyToCaseMap = new HashMap<>();
+    private final Map<String, UrlShorteningCase> shortenedKeyToCaseMap = new HashMap<>();
 
     public UrlShorteningCase applyUrlShortenCase(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
         this.checkShortenedKeyExisted(urlShortenCaseApplyVO.getShortenedUrlKey());

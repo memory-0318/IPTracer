@@ -26,7 +26,7 @@ public class UrlShortenCaseApplyDTO {
     @NotBlank(message = "必須指定原始URL")
     private String urlToShorten;
 
-    @NotEmpty(message = "縮網址後綴如果設定就不可以是空白")
+//    @NotEmpty(message = "縮網址後綴如果設定就不可以是空白")
     private String shortenedUrlKey;
 
     private String remark;
