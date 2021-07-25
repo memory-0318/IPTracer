@@ -2,7 +2,7 @@ package tw.com.demo.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import tw.com.demo.dto.UrlShortenCaseApplyDTO;
+import tw.com.demo.model.dto.UrlShortenCaseApplyDTO;
 import tw.com.demo.model.vo.UrlShortenCaseApplyVO;
 
 /**

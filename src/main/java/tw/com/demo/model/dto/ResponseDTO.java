@@ -1,4 +1,4 @@
-package tw.com.demo.dto;
+package tw.com.demo.model.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
