@@ -2,6 +2,7 @@ package tw.com.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tw.com.demo.dao.SimpleUrlShorteningCaseDAOImpl;
 import tw.com.demo.generator.id.CaseIdGenerator;
 import tw.com.demo.generator.shorten.key.UrlEncoder;
 import tw.com.demo.mapper.UrlShortenCaseMapper;
@@ -12,8 +13,6 @@ import tw.com.demo.model.vo.UrlShortenCaseApplyVO;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -26,8 +25,7 @@ import java.util.Optional;
 public class UrlShortenService {
     private final CaseIdGenerator caseIdGenerator;
     private final UrlEncoder urlEncoder;
-
-    private final Map<String, UrlShorteningCase> shortenedKeyToCaseMap = new HashMap<>();
+    private final SimpleUrlShorteningCaseDAOImpl urlShorteningCaseDAO;
 
     public UrlShorteningCase applyUrlShorteningCase(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
         this.checkShortenKeySpecified(urlShortenCaseApplyVO.getShortenedUrlKey());
@@ -44,25 +42,28 @@ public class UrlShortenService {
             .setShortenedUrl(shortenedUrl)
             .build();
 
-        this.shortenedKeyToCaseMap.put(shortenedUrlKey, urlShorteningCase);
+        this.urlShorteningCaseDAO.applyUrlShorteningCase(urlShorteningCase);
 
         return urlShorteningCase;
     }
 
     public String retrieveOriginalUrl(String shortenedKey) {
-        return Optional.ofNullable(this.shortenedKeyToCaseMap.get(shortenedKey))
+        return this.urlShorteningCaseDAO.getUrlShorteningCase(shortenedKey)
             .map(UrlShorteningCase::getOriginalUrl)
             .orElseThrow(() -> new RuntimeException("The shortened url key is not existed"));
     }
 
     public void recordClientInfo(String shortenedKey, ClientInfoVO clientInfoVO) {
-        UrlShorteningCase shorteningCase = this.shortenedKeyToCaseMap.get(shortenedKey);
-        shorteningCase.addUrlShortenCaseDetail(TriggeredClientInfo.builder()
-            .setTriggeredDateTime(clientInfoVO.getTriggeredDateTime())
-            .setHostname(clientInfoVO.getHostname())
-            .setIpAddress(clientInfoVO.getIpAddress())
-            .setUserAgent(clientInfoVO.getUserAgent())
-            .build());
+        Optional<UrlShorteningCase> shorteningCaseOptional = this.urlShorteningCaseDAO
+            .getUrlShorteningCase(shortenedKey);
+        shorteningCaseOptional.ifPresent(urlShorteningCase -> {
+            urlShorteningCase.addUrlShortenCaseDetail(TriggeredClientInfo.builder()
+                .setTriggeredDateTime(clientInfoVO.getTriggeredDateTime())
+                .setHostname(clientInfoVO.getHostname())
+                .setIpAddress(clientInfoVO.getIpAddress())
+                .setUserAgent(clientInfoVO.getUserAgent())
+                .build());
+        });
     }
 
     protected String generateShortenedUrlKey(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
@@ -75,13 +76,15 @@ public class UrlShortenService {
         return result;
     }
 
-    protected boolean isShortenedKeyExisted(String shortenedKey) {
-        return this.shortenedKeyToCaseMap.containsKey(shortenedKey);
+    protected void checkShortenedKeyExisted(String shortenedKey) {
+        if (this.urlShorteningCaseDAO.isShortenedUrlKeyExisted(shortenedKey)) {
+            throw new IllegalArgumentException("The shortened key is not existed");
+        }
     }
 
-    protected void checkShortenedKeyExisted(String shortenedKey) {
-        if (this.isShortenedKeyExisted(shortenedKey)) {
-            throw new IllegalArgumentException("The shortened key is not existed");
+    protected void checkShortenKeySpecified(String shortenedKey) {
+        if (this.urlShorteningCaseDAO.isShortenedUrlKeyExisted(shortenedKey)) {
+            throw new IllegalArgumentException("The shortened key has been specified");
         }
     }
 
@@ -94,12 +97,6 @@ public class UrlShortenService {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             throw new RuntimeException("Cannot get host address");
-        }
-    }
-
-    protected void checkShortenKeySpecified(String shortenedKey) {
-        if (this.isShortenedKeyExisted(shortenedKey)) {
-            throw new IllegalArgumentException("The shortened key has been specified");
         }
     }
 }
