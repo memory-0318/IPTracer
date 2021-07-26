@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,9 +24,9 @@ public class UrlShorteningCase {
     private String remark;
     private Boolean webRtcEnabled;
     private List<String> recipients;
-    private List<TriggeredClientInfo> details;
+    private List<TriggeredClientInfo> clientInfos = new ArrayList<>();
 
-    public void addUrlShortenCaseDetail(TriggeredClientInfo detail) {
-        this.details.add(detail);
+    public void addUrlShortenCaseDetail(TriggeredClientInfo clientInfo) {
+        this.clientInfos.add(clientInfo);
     }
 }
