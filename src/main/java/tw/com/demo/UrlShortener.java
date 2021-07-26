@@ -3,13 +3,16 @@ package tw.com.demo;
 import tw.com.demo.generator.id.CaseIdGenerator;
 import tw.com.demo.generator.shorten.key.UrlEncoder;
 import tw.com.demo.mapper.UrlShortenCaseMapper;
+import tw.com.demo.model.entity.TriggeredClientInfo;
 import tw.com.demo.model.entity.UrlShorteningCase;
+import tw.com.demo.model.vo.ClientInfoVO;
 import tw.com.demo.model.vo.UrlShortenCaseApplyVO;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author Brian Su <brian.su@tpisoftware.com>
@@ -22,7 +25,7 @@ public class UrlShortener {
 
     private final Map<String, UrlShorteningCase> shortenedKeyToCaseMap = new HashMap<>();
 
-    public UrlShorteningCase applyUrlShortenCase(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
+    public UrlShorteningCase applyUrlShorteningCase(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
         this.checkShortenedKeyExisted(urlShortenCaseApplyVO.getShortenedUrlKey());
 
         String caseId = this.caseIdGenerator.genCaseId();
@@ -32,6 +35,7 @@ public class UrlShortener {
         UrlShorteningCase urlShorteningCase = UrlShortenCaseMapper.INSTANCE.toBO(urlShortenCaseApplyVO)
             .toBuilder()
             .setCaseId(caseId)
+            .setOriginalUrl(urlShortenCaseApplyVO.getOriginalUrl())
             .setShortenedUrlKey(shortenedUrlKey)
             .setShortenedUrl(shortenedUrl)
             .build();
@@ -41,11 +45,27 @@ public class UrlShortener {
         return urlShorteningCase;
     }
 
+    public String getOriginalUrl(String shortenedKey) {
+        return Optional.ofNullable(this.shortenedKeyToCaseMap.get(shortenedKey))
+            .map(UrlShorteningCase::getOriginalUrl)
+            .orElseThrow(() -> new RuntimeException("The shortened url key is not existed"));
+    }
+
+    public void recordClientInfo(String shortenedKey, ClientInfoVO clientInfoVO) {
+        UrlShorteningCase shorteningCase = this.shortenedKeyToCaseMap.get(shortenedKey);
+        shorteningCase.addUrlShortenCaseDetail(TriggeredClientInfo.builder()
+            .setTriggeredDateTime(clientInfoVO.getTriggeredDateTime())
+            .setHostname(clientInfoVO.getHostname())
+            .setIpAddress(clientInfoVO.getIpAddress())
+            .setUserAgent(clientInfoVO.getUserAgent())
+            .build());
+    }
+
     protected String generateShortenedUrlKey(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {
         String result = urlShortenCaseApplyVO.getShortenedUrlKey();
 
         if (result == null) {
-            result = this.urlEncoder.encodeUrl(urlShortenCaseApplyVO.getUrlToShorten());
+            result = this.urlEncoder.encodeUrl(urlShortenCaseApplyVO.getOriginalUrl());
         }
 
         return result;
@@ -67,9 +87,15 @@ public class UrlShortener {
         return this.shortenedKeyToCaseMap.containsKey(shortenedKey);
     }
 
-    protected void checkShortenedKeyExisted(String shortenedKey) {
+    protected void checkShortenKeySpecified(String shortenedKey) {
         if (this.isShortenedKeyExisted(shortenedKey)) {
             throw new IllegalArgumentException("The shortened key has been specified");
+        }
+    }
+
+    protected void checkShortenedKeyExisted(String shortenedKey) {
+        if (this.isShortenedKeyExisted(shortenedKey)) {
+            throw new IllegalArgumentException("The shortened key is not existed");
         }
     }
 

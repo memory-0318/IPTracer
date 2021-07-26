@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tw.com.demo.mapper.UrlShorteningCaseApplyMapper;
 import tw.com.demo.model.dto.ResponseDTO;
-import tw.com.demo.model.dto.UrlShortenCaseApplyDTO;
-import tw.com.demo.mapper.UrlShortenCaseApplyMapper;
+import tw.com.demo.model.dto.UrlShorteningCaseApplyDTO;
 import tw.com.demo.model.entity.UrlShorteningCase;
 import tw.com.demo.service.UrlShortenService;
 
@@ -26,9 +26,9 @@ public class UrlShortenController {
     private final UrlShortenService urlShortenService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDTO<String> applyUrlShorteningCase(@Valid @RequestBody UrlShortenCaseApplyDTO applyDTO) {
+    public ResponseDTO<String> applyUrlShorteningCase(@Valid @RequestBody UrlShorteningCaseApplyDTO applyDTO) {
         UrlShorteningCase urlShorteningCase = this.urlShortenService
-            .applyUrlShorteningCase(UrlShortenCaseApplyMapper.INSTANCE.toVO(applyDTO));
+            .applyUrlShorteningCase(UrlShorteningCaseApplyMapper.INSTANCE.toVO(applyDTO));
         return ResponseDTO.ok(urlShorteningCase.getShortenedUrl());
     }
 }

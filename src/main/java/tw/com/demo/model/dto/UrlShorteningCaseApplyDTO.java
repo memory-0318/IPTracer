@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @Setter(value = AccessLevel.NONE)
 @Builder(setterPrefix = "set", toBuilder = true)
-public class UrlShortenCaseApplyDTO {
+public class UrlShorteningCaseApplyDTO {
     @NotBlank(message = "案名不可為空")
     private String caseName;
 
@@ -24,9 +24,8 @@ public class UrlShortenCaseApplyDTO {
         "(%[0-9A-Fa-f]{2}|[-()_.!~*';/?:@&=+$,A-Za-z0-9])+)([).!';/?:,][[:blank:]])?$",
         message = "必須符合http/https格式")
     @NotBlank(message = "必須指定原始URL")
-    private String urlToShorten;
+    private String originalUrl;
 
-//    @NotEmpty(message = "縮網址後綴如果設定就不可以是空白")
     private String shortenedUrlKey;
 
     private String remark;

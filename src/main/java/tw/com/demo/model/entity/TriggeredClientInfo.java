@@ -13,10 +13,9 @@ import java.time.OffsetDateTime;
  */
 @Data
 @Builder(setterPrefix = "set", toBuilder = true)
-public class UrlShortenCaseDetail {
+public class TriggeredClientInfo {
     private OffsetDateTime triggeredDateTime;
-    private IpInfo vpnInfo;
-    private IpInfo ispInfo;
-    private String osInfo;
-    private String browserInfo;
+    private String hostname;
+    private String ipAddress;
+    private String userAgent;
 }

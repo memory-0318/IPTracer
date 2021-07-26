@@ -2,7 +2,6 @@ package tw.com.demo.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 import java.util.List;
@@ -18,11 +17,15 @@ import java.util.List;
 public class UrlShorteningCase {
     private String caseId;
     private String caseName;
-    private String urlToShorten;
+    private String originalUrl;
     private String shortenedUrlKey;
     private String shortenedUrl;
     private String remark;
     private Boolean webRtcEnabled;
     private List<String> recipients;
-    private List<UrlShortenCaseDetail> details;
+    private List<TriggeredClientInfo> details;
+
+    public void addUrlShortenCaseDetail(TriggeredClientInfo detail) {
+        this.details.add(detail);
+    }
 }

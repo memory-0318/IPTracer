@@ -14,7 +14,7 @@ import java.util.List;
 @Builder(setterPrefix = "set", toBuilder = true)
 public class UrlShortenCaseApplyVO {
     private String caseName;
-    private String urlToShorten;
+    private String originalUrl;
     private String shortenedUrlKey;
     private String remark;
     private Boolean webRtcEnabled;
