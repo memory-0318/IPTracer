@@ -1,6 +1,7 @@
-package tw.com.demo.model.entity;
+package tw.com.demo.model.dto;
 
 import lombok.*;
+import tw.com.demo.model.entity.TriggeredClientInfo;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @EqualsAndHashCode
 @ToString
 @Builder(setterPrefix = "set", toBuilder = true)
-public class UrlShorteningCase {
+public class UrlShorteningCaseDTO {
     private String caseId;
     private String caseName;
     private String originalUrl;

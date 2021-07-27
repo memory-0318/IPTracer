@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
 @Data
 @Setter(value = AccessLevel.NONE)
 @Builder(setterPrefix = "set")
-public class ResponseDTO <T> {
+public class ResponseDTO<T> {
     private Boolean success;
     private OffsetDateTime dateTime;
     private T data;

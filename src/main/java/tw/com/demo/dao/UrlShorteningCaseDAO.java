@@ -2,6 +2,7 @@ package tw.com.demo.dao;
 
 import tw.com.demo.model.entity.UrlShorteningCase;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -11,6 +12,8 @@ import java.util.Optional;
  */
 public interface UrlShorteningCaseDAO {
     void applyUrlShorteningCase(UrlShorteningCase urlShorteningCase);
+
+    Collection<UrlShorteningCase> listAllCases();
 
     void saveUrlShorteningCase(UrlShorteningCase urlShorteningCase);
 

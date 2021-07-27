@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
 public class RedirectController {
     private final UrlShortenService urlShortenService;
 
-    @GetMapping(value = { "/{shortenedUrlKey}" })
+    @GetMapping(value = { "/route/{shortenedUrlKey}" })
     public String redirectMiddlePage(@PathVariable("shortenedUrlKey") String shortenedUrlKey) {
         return "index";
     }

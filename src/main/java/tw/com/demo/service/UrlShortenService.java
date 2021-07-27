@@ -15,6 +15,7 @@ import tw.com.demo.model.vo.UrlShorteningCaseEditVO;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author Brian Su <brian.su@tpisoftware.com>
@@ -61,6 +62,15 @@ public class UrlShortenService {
         this.urlShorteningCaseDAO.saveUrlShorteningCase(result);
     }
 
+    public Collection<UrlShorteningCase> listAllCases() {
+        return this.urlShorteningCaseDAO.listAllCases();
+    }
+
+    public UrlShorteningCase getUrlShorteningCase(String caseId) {
+        return this.urlShorteningCaseDAO.getUrlShorteningCaseByCaseId(caseId)
+            .orElseThrow(() -> new IllegalArgumentException("The specified case is not existed"));
+    }
+
     public String retrieveOriginalUrl(String shortenedKey) {
         return this.urlShorteningCaseDAO.getUrlShorteningCaseByShortenedUrlKey(shortenedKey)
             .map(UrlShorteningCase::getOriginalUrl)
@@ -81,6 +91,12 @@ public class UrlShortenService {
             .build());
 
         this.urlShorteningCaseDAO.saveUrlShorteningCase(result);
+    }
+
+    public Collection<TriggeredClientInfo> listUrlShortenCaseTriggeredClientInfos(String caseId) {
+        return this.urlShorteningCaseDAO.getUrlShorteningCaseByCaseId(caseId)
+            .map(UrlShorteningCase::getClientInfos)
+            .orElseThrow(() -> new IllegalArgumentException("The specified case is not existed"));
     }
 
     protected String generateShortenedUrlKey(UrlShortenCaseApplyVO urlShortenCaseApplyVO) {

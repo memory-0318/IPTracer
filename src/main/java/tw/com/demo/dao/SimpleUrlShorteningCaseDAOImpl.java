@@ -4,9 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import tw.com.demo.model.entity.UrlShorteningCase;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Brian Su <brian.su@tpisoftware.com>
@@ -20,6 +18,11 @@ public class SimpleUrlShorteningCaseDAOImpl implements UrlShorteningCaseDAO {
     @Override
     public void applyUrlShorteningCase(UrlShorteningCase urlShorteningCase) {
         this.shortenedKeyToCaseMap.put(urlShorteningCase.getShortenedUrlKey(), urlShorteningCase);
+    }
+
+    @Override
+    public Collection<UrlShorteningCase> listAllCases() {
+        return this.shortenedKeyToCaseMap.values();
     }
 
     @Override
