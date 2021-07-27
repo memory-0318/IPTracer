@@ -1,5 +1,6 @@
 package tw.com.demo.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import tw.com.demo.model.entity.UrlShorteningCase;
 
@@ -22,12 +23,30 @@ public class SimpleUrlShorteningCaseDAOImpl implements UrlShorteningCaseDAO {
     }
 
     @Override
-    public Optional<UrlShorteningCase> getUrlShorteningCase(String shortenedUrlKey) {
+    public void saveUrlShorteningCase(UrlShorteningCase urlShorteningCase) {
+        this.shortenedKeyToCaseMap.put(urlShorteningCase.getShortenedUrlKey(), urlShorteningCase);
+    }
+
+    @Override
+    public Optional<UrlShorteningCase> getUrlShorteningCaseByShortenedUrlKey(String shortenedUrlKey) {
         return Optional.ofNullable(this.shortenedKeyToCaseMap.get(shortenedUrlKey));
+    }
+
+    @Override
+    public Optional<UrlShorteningCase> getUrlShorteningCaseByCaseId(String caseId) {
+        return this.shortenedKeyToCaseMap.values()
+            .stream()
+            .filter(urlShorteningCase -> StringUtils.equals(urlShorteningCase.getCaseId(), caseId))
+            .findAny();
     }
 
     @Override
     public boolean isShortenedUrlKeyExisted(String shortenedUrlKey) {
         return this.shortenedKeyToCaseMap.containsKey(shortenedUrlKey);
+    }
+
+    @Override
+    public boolean isCaseIdExisted(String caseId) {
+        return false;
     }
 }

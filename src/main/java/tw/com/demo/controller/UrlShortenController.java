@@ -2,13 +2,12 @@ package tw.com.demo.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tw.com.demo.mapper.UrlShorteningCaseApplyMapper;
+import tw.com.demo.mapper.UrlShorteningCaseEditMapper;
 import tw.com.demo.model.dto.ResponseDTO;
 import tw.com.demo.model.dto.UrlShorteningCaseApplyDTO;
+import tw.com.demo.model.dto.UrlShorteningCaseEditDTO;
 import tw.com.demo.model.entity.UrlShorteningCase;
 import tw.com.demo.service.UrlShortenService;
 
@@ -30,5 +29,13 @@ public class UrlShortenController {
         UrlShorteningCase urlShorteningCase = this.urlShortenService
             .applyUrlShorteningCase(UrlShorteningCaseApplyMapper.INSTANCE.toVO(applyDTO));
         return ResponseDTO.ok(urlShorteningCase.getShortenedUrl());
+    }
+
+    @PutMapping(value = {"/{caseId}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDTO<Void> editUrlShorteningCase(
+        @PathVariable("caseId") String caseId,
+        @Valid @RequestBody UrlShorteningCaseEditDTO editDTO) {
+        this.urlShortenService.editUrlShorteningCase(caseId, UrlShorteningCaseEditMapper.INSTANCE.toVO(editDTO));
+        return ResponseDTO.ok(null);
     }
 }

@@ -24,7 +24,7 @@ public class UrlShorteningCase {
     private String remark;
     private Boolean webRtcEnabled;
     private List<String> recipients;
-    private List<TriggeredClientInfo> clientInfos = new ArrayList<>();
+    private List<TriggeredClientInfo> clientInfos;
 
     public void addUrlShortenCaseDetail(TriggeredClientInfo clientInfo) {
         this.clientInfos.add(clientInfo);

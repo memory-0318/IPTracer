@@ -12,7 +12,13 @@ import java.util.Optional;
 public interface UrlShorteningCaseDAO {
     void applyUrlShorteningCase(UrlShorteningCase urlShorteningCase);
 
-    Optional<UrlShorteningCase> getUrlShorteningCase(String shortenedUrlKey);
+    void saveUrlShorteningCase(UrlShorteningCase urlShorteningCase);
+
+    Optional<UrlShorteningCase> getUrlShorteningCaseByShortenedUrlKey(String shortenedUrlKey);
+
+    Optional<UrlShorteningCase> getUrlShorteningCaseByCaseId(String caseId);
 
     boolean isShortenedUrlKeyExisted(String shortenedUrlKey);
+
+    boolean isCaseIdExisted(String caseId);
 }
